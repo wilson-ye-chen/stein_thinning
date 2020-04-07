@@ -1,1 +1,1 @@
-# stein_thinning
+# Stein Thinning Package
