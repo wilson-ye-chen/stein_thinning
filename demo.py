@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 from stein_thin import thin
 
 # Read MCMC output from files
-smp = np.genfromtxt('../sample_chains/gmm/smp.csv', delimiter=',')
-scr = np.genfromtxt('../sample_chains/gmm/scr.csv', delimiter=',')
+smp = np.genfromtxt('sample_chains/gmm/smp.csv', delimiter=',')
+scr = np.genfromtxt('sample_chains/gmm/scr.csv', delimiter=',')
 
 # Run Stein Thinning
 x, s, e = thin(smp, scr, 40)
