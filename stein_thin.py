@@ -3,7 +3,7 @@
 import numpy as np
 from numpy.linalg import inv
 from scipy.spatial.distance import pdist
-from stein import greedy, fmin_grid, fk_imq
+from stein_thinning.stein import greedy, fmin_grid, fk_imq
 
 def thin(smp, scr, n, pre='sclmed'):
     # Sample size and dimension
