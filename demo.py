@@ -2,7 +2,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from stein_thin import thin
+from stein_thinning.stein_thin import thin
 
 # Read MCMC output from files
 smp = np.genfromtxt('sample_chains/gmm/smp.csv', delimiter=',')
