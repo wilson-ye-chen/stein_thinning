@@ -13,7 +13,7 @@ def thin(smp, scr, n, pre='sclmed'):
     # Squared pairwise median
     def med2(m):
         if sz > m:
-            sub = smp[np.linspace(0, n - 1, m, dtype=int)]
+            sub = smp[np.linspace(0, sz - 1, m, dtype=int)]
         else:
             sub = smp
         return np.median(pdist(sub)) ** 2
