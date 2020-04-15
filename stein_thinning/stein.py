@@ -14,7 +14,7 @@ def fk_imq(a, b, linv):
     amb = a - b
     return (1 + np.dot(np.dot(amb, linv), amb)) ** (-0.5)
 
-def greedy(d, vfs, fk, fmin, n):
+def make_kfuncs(fk):
     # Gradient functions
     fdka = jit(grad(fk, argnums=0))
     fdkb = jit(grad(fk, argnums=1))
@@ -33,13 +33,8 @@ def greedy(d, vfs, fk, fmin, n):
     # Vectorised Stein kernel
     vfk0 = vmap(fk0, (0, 0, 0, 0), 0)
 
-    # Returning arrays
-    x = np.empty((n, d))
-    s = np.empty((n, d))
-    e = np.empty(n)
-
     # Partial sum
-    def fps(x_new, s_new, i):
+    def fps(x_new, s_new, x, s, i):
         a = np.tile(x_new, (i, 1))
         b = x[0:i]
         sa = np.tile(s_new, (i, 1))
@@ -49,7 +44,20 @@ def greedy(d, vfs, fk, fmin, n):
         return np.sum(k0ab) * 2 + k0aa
 
     # Vectorised partial sum
-    vfps = vmap(fps, (0, 0, None), 0)
+    vfps = vmap(fps, (0, 0, None, None, None), 0)
+
+    # Return the JAX transformations
+    return fk0, vfk0, fps, vfps
+
+
+def greedy(d, vfs, fk, fmin, n):
+    # JAX kernel transformations
+    fk0, vfk0, fps, vfps = make_kfuncs(fk)
+
+    # Returning arrays
+    x = np.empty((n, d))
+    s = np.empty((n, d))
+    e = np.empty(n)
 
     # Generate initial point
     vf = lambda x_new, s_new: vfk0(x_new, x_new, s_new, s_new)
@@ -61,7 +69,7 @@ def greedy(d, vfs, fk, fmin, n):
 
     # Generate subsequent points
     for i in range(1, n):
-        vf = lambda x_new, s_new: vfps(x_new, s_new, i)
+        vf = lambda x_new, s_new: vfps(x_new, s_new, x, s, i)
         x_min, s_min, e_min = fmin(vf, x, vfs)
         x = index_update(x, i, x_min)
         s = index_update(s, i, s_min)
