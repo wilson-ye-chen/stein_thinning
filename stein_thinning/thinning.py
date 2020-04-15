@@ -7,8 +7,7 @@ from stein_thinning.stein import greedy, fmin_grid, fk_imq
 
 def thin(smp, scr, n, pre='sclmed'):
     # Sample size and dimension
-    sz = smp.shape[0]
-    dm = smp.shape[1]
+    sz, dm = smp.shape
 
     # Squared pairwise median
     def med2(m):

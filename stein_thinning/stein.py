@@ -49,10 +49,29 @@ def make_kfuncs(fk):
     # Return the JAX transformations
     return fk0, vfk0, fps, vfps
 
+def ksd(x, s, fk):
+    # JAX kernel transformations
+    fk0, _, fps, _ = make_kfuncs(fk)
+
+    n = x.shape[0]
+    ks = np.empty(n)
+
+    # Initial point
+    ps = fk0(x[0], x[0], s[0], s[0])
+    ks = index_update(ks, 0, np.sqrt(ps))
+    print('i = 0')
+
+    # Subsequent points
+    for i in range(1, n):
+        ps += fps(x[i], s[i], x, s, i)
+        ks = index_update(ks, i, np.sqrt(ps) / (i + 1))
+        print(f'i = {i}')
+
+    return ks
 
 def greedy(d, vfs, fk, fmin, n):
     # JAX kernel transformations
-    fk0, vfk0, fps, vfps = make_kfuncs(fk)
+    _, vfk0, _, vfps = make_kfuncs(fk)
 
     # Returning arrays
     x = np.empty((n, d))
