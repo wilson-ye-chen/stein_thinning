@@ -1,1 +1,1 @@
-__all__ = ['stein_thin', 'stein']
+__all__ = ['thinning', 'stein', 'kernel']

@@ -3,9 +3,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from os.path import join, dirname
-from numpy.linalg import inv
-from stein_thinning.stein import fk_imq, ksd
+from stein_thinning.stein import ksd
 from stein_thinning.thinning import thin
+from stein_thinning.kernel import make_imq, make_precon
 
 # Read MCMC output from files
 dir = join(dirname(__file__), 'sample_chains/gmm')
@@ -21,10 +21,12 @@ plt.plot(smp[:,0], smp[:,1], color=(0.4, 0.4, 0.4), linewidth=1)
 plt.plot(x[:,0], x[:,1], 'r.', markersize=16)
 
 # Compute KSD
-linv = inv(0.6 * np.identity(smp.shape[1]))
-fk = lambda a, b: fk_imq(a, b, linv)
+fk = make_imq(smp, 'sclmed')
 ks_smp = ksd(smp, scr, fk)
 ks_x = ksd(x, s, fk)
+
+# Print out the preconditioner matrix
+print(make_precon(smp, 'sclmed'))
 
 # Plot KSD curves
 plt.figure()

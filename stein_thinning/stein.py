@@ -10,10 +10,6 @@ def fmin_grid(vf, x, vfs, grid):
     i = np.argmin(val)
     return grid[i], s[i], grid.shape[0]
 
-def fk_imq(a, b, linv):
-    amb = a - b
-    return (1 + np.dot(np.dot(amb, linv), amb)) ** (-0.5)
-
 def make_kfuncs(fk):
     # Gradient functions
     fdka = jit(grad(fk, argnums=0))
