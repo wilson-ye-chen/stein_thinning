@@ -1,8 +1,6 @@
 """Core functions of Stein Thinning."""
 
 import numpy as np
-from numpy.linalg import inv
-from scipy.spatial.distance import pdist
 from stein_thinning.stein import greedy, fmin_grid
 from stein_thinning.kernel import make_imq
 
@@ -16,6 +14,7 @@ def thin(smp, scr, n, pre='sclmed'):
 
     # Run SP using grid search
     vfs = lambda x: scr_uni
-    fk = make_imq(smp, pre)
+    fk0 = make_imq(smp, pre)
     fmin = lambda vf, x, vfs: fmin_grid(vf, x, vfs, smp_uni)
-    return greedy(dm, vfs, fk, fmin, n)
+    x, s, _ = greedy(dm, vfs, fk0, fmin, n)
+    return x, s

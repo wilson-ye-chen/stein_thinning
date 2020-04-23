@@ -13,7 +13,7 @@ smp = np.genfromtxt(join(dir, 'smp.csv'), delimiter=',')
 scr = np.genfromtxt(join(dir, 'scr.csv'), delimiter=',')
 
 # Run Stein Thinning
-x, s, e = thin(smp, scr, 40)
+x, s = thin(smp, scr, 40)
 
 # Plot point-set over trace
 plt.figure()
@@ -21,9 +21,9 @@ plt.plot(smp[:,0], smp[:,1], color=(0.4, 0.4, 0.4), linewidth=1)
 plt.plot(x[:,0], x[:,1], 'r.', markersize=16)
 
 # Compute KSD
-fk = make_imq(smp, 'sclmed')
-ks_smp = ksd(smp, scr, fk)
-ks_x = ksd(x, s, fk)
+fk0 = make_imq(smp, 'sclmed')
+ks_smp = ksd(smp, scr, fk0)
+ks_x = ksd(x, s, fk0)
 
 # Print out the preconditioner matrix
 print(make_precon(smp, 'sclmed'))
