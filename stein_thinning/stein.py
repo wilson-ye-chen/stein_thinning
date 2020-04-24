@@ -11,8 +11,8 @@ def fmin_grid(vf, x, vfs, grid):
 def vfps(x_new, s_new, x, s, i, fk0):
     n_new = x_new.shape[0]
     ps = np.empty(n_new)
-    ab_sum = 0.
     for j in range(n_new):
+        ab_sum = 0.
         for k in range(i):
             ab_sum += fk0(x_new[j], x[k], s_new[j], s[k])
         aa = fk0(x_new[j], x_new[j], s_new[j], s_new[j])
@@ -20,11 +20,13 @@ def vfps(x_new, s_new, x, s, i, fk0):
     return ps
 
 def ksd(x, s, fk0):
-    n = x.shape[0]
+    n, d = x.shape
     ks = np.empty(n)
     ps = 0.
     for i in range(n):
-        ps += vfps(x[i], s[i], x, s, i, fk0)
+        x_new = x[i].reshape((-1, d))
+        s_new = s[i].reshape((-1, d))
+        ps += vfps(x_new, s_new, x, s, i, fk0)
         ks[i] = np.sqrt(ps) / (i + 1)
         print(f'i = {i}')
     return ks
