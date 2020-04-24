@@ -21,12 +21,12 @@ plt.plot(smp[:,0], smp[:,1], color=(0.4, 0.4, 0.4), linewidth=1)
 plt.plot(x[:,0], x[:,1], 'r.', markersize=16)
 
 # Compute KSD
-fk0 = make_imq(smp, scr, 'sclmed')
+fk0 = make_imq(smp, scr, pre='sclmed')
 ks_smp = ksd(smp, scr, fk0)
 ks_x = ksd(x, s, fk0)
 
 # Print out the preconditioner matrix
-print(make_precon(smp, scr, 'sclmed'))
+print(make_precon(smp, scr, pre='sclmed'))
 
 # Print out the Stein kernel matrix
 print(kmat(x, s, fk0))
