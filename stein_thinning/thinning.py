@@ -14,7 +14,7 @@ def thin(smp, scr, n, pre='sclmed'):
 
     # Run SP using grid search
     vfs = lambda x: scr_uni
-    fk0 = make_imq(smp, pre)
+    fk0 = make_imq(smp, scr, pre)
     fmin = lambda vf, x, vfs: fmin_grid(vf, x, vfs, smp_uni)
     x, s, _ = greedy(dm, vfs, fk0, fmin, n)
     return x, s

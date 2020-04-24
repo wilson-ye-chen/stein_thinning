@@ -13,7 +13,7 @@ def fk0_imq(a, b, sa, sb, linv):
     t3 = np.dot(sa, sb) / (qf ** 0.5)
     return t1 + t2 + t3
 
-def make_precon(smp, pre='sclmed'):
+def make_precon(smp, scr, pre='sclmed'):
     # Sample size and dimension
     sz, dm = smp.shape
 
@@ -36,14 +36,16 @@ def make_precon(smp, pre='sclmed'):
     elif pre == 'bayesian':
         c = np.cov(smp, rowvar=False)
         linv = inv(1 / (sz - dm - 1) * (np.identity(dm) + (sz - 1) * c))
+    elif pre == 'avehess':
+        linv = np.dot(scr.T, scr) / sz
     elif isfloat(pre):
         linv = inv(float(pre) * np.identity(dm))
     else:
         raise ValueError('incorrect preconditioner type.')
     return linv
 
-def make_imq(smp, pre='sclmed'):
-    linv = make_precon(smp, pre)
+def make_imq(smp, scr, pre='sclmed'):
+    linv = make_precon(smp, scr, pre)
     def fk0(a, b, sa, sb):
         return fk0_imq(a, b, sa, sb, linv)
     return fk0
