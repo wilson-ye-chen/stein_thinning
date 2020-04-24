@@ -1,6 +1,7 @@
 """Core functions of Stein Points."""
 
 import numpy as np
+from stein_thinning.util import mirror_lower
 
 def fmin_grid(vf, x, vfs, grid):
     s = vfs(grid)
@@ -30,6 +31,15 @@ def ksd(x, s, fk0):
         ks[i] = np.sqrt(ps) / (i + 1)
         print(f'i = {i}')
     return ks
+
+def kmat(x, s, fk0):
+    n = x.shape[0]
+    k0 = np.zeros((n, n))
+    for i in range(n):
+        for j in range(i + 1):
+            k0[i, j] = fk0(x[i], x[j], s[i], s[j])
+    mirror_lower(k0)
+    return k0
 
 def greedy(d, vfs, fk0, fmin, n):
     x = np.empty((n, d))
