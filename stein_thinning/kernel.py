@@ -5,12 +5,12 @@ from numpy.linalg import inv
 from scipy.spatial.distance import pdist
 from stein_thinning.util import isfloat
 
-def fk0_imq(a, b, sa, sb, linv):
-    amb = a - b
-    qf = 1 + np.dot(np.dot(amb, linv), amb)
-    t1 = -3 * np.dot(np.dot(amb, np.dot(linv, linv)), amb) / (qf ** 2.5)
-    t2 = (np.trace(linv) + np.dot(np.dot((sa - sb), linv), amb)) / (qf ** 1.5)
-    t3 = np.dot(sa, sb) / (qf ** 0.5)
+def vfk0_imq(a, b, sa, sb, linv):
+    amb = a.T - b.T
+    qf = 1 + np.sum(np.dot(linv, amb) * amb, axis=0)
+    t1 = -3 * np.sum(np.dot(np.dot(linv, linv), amb) * amb, axis=0) / (qf ** 2.5)
+    t2 = (np.trace(linv) + np.sum(np.dot(linv, sa.T - sb.T) * amb, axis=0)) / (qf ** 1.5)
+    t3 = np.sum(sa.T * sb.T, axis=0) / (qf ** 0.5)
     return t1 + t2 + t3
 
 def make_precon(smp, scr, pre='sclmed'):
@@ -46,6 +46,6 @@ def make_precon(smp, scr, pre='sclmed'):
 
 def make_imq(smp, scr, pre='sclmed'):
     linv = make_precon(smp, scr, pre)
-    def fk0(a, b, sa, sb):
-        return fk0_imq(a, b, sa, sb, linv)
-    return fk0
+    def vfk0(a, b, sa, sb):
+        return vfk0_imq(a, b, sa, sb, linv)
+    return vfk0
