@@ -8,7 +8,6 @@ setup(
     author='Stein Thinning team',
     license='MIT',
     packages=['stein_thinning'],
-    scripts=['stein_thinning/demo.py'],
     package_data={'stein_thinning': ['sample_chains/gmm/*.csv']},
-    install_requires=['numpy']
+    install_requires=['numpy', 'scipy']
     )
