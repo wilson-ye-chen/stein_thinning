@@ -18,10 +18,10 @@ smp = fit['x']
 scr = np.apply_along_axis(fit.grad_log_prob, 1, smp)
 
 # Obtain a subset of 40 points
-x, s = thin(smp, scr, 40)
+iSel = thin(smp, scr, 40)
 
 # Plot point-set over trace
 plt.figure()
 plt.plot(smp[:,0], smp[:,1], color=(0.4, 0.4, 0.4), linewidth=1)
-plt.plot(x[:,0], x[:,1], 'r.', markersize=10)
+plt.plot(smp[iSel, 0], smp[iSel, 1], 'r.', markersize=10)
 plt.show()
