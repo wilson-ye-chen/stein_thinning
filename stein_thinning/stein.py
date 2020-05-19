@@ -23,18 +23,43 @@ def vfps(x_new, s_new, x, s, i, vfk0):
         return k0aa
 
 def ksd(x, s, vfk0):
-    n, d = x.shape
+    """
+    Compute a cumulative sequence of KSD values.
+
+    Args:
+    x    - n x d array where each row is a d-dimensional sample point.
+    s    - n x d array where each row is a gradient of the log target.
+    vfk0 - vectorised Stein kernel function.
+
+    Returns:
+    array shaped (n,) containing the sequence of KSD values.
+    """
+
+    n = x.shape[0]
     ks = np.empty(n)
     ps = 0.
     for i in range(n):
-        x_new = x[i].reshape((-1, d))
-        s_new = s[i].reshape((-1, d))
-        ps += vfps(x_new, s_new, x, s, i, vfk0)
+        x_i = np.tile(x[i], (i + 1, 1))
+        s_i = np.tile(s[i], (i + 1, 1))
+        k0 = vfk0(x_i, x[0:(i + 1)], s_i, s[0:(i + 1)])
+        ps += 2 * np.sum(k0[0:i]) + k0[i]
         ks[i] = np.sqrt(ps) / (i + 1)
-        print(f'i = {i}')
+        print(f'KSD: {i + 1} of {n}')
     return ks
 
 def kmat(x, s, vfk0):
+    """
+    Compute a Stein kernel matrix.
+
+    Args:
+    x    - n x d array where each row is a d-dimensional sample point.
+    s    - n x d array where each row is a gradient of the log target.
+    vfk0 - vectorised Stein kernel function.
+
+    Returns:
+    n x n array containing the Stein kernel matrix.
+    """
+
     n = x.shape[0]
     k0 = np.zeros((n, n))
     for i in range(n):
