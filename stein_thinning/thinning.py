@@ -29,11 +29,11 @@ def thin(smp, scr, m, pre='sclmed'):
     # Populate columns of k0 as new points are selected
     k0[:, 0] = vfk0(smp, smp, scr, scr)
     idx[0] = np.argmin(k0[:, 0])
-    print(f'{1} of {m}')
+    print(f'THIN: {1} of {m}')
     for i in range(1, m):
         smp_last = np.tile(smp[idx[i - 1]], (n, 1))
         scr_last = np.tile(scr[idx[i - 1]], (n, 1))
         k0[:, i] = vfk0(smp, smp_last, scr, scr_last)
         idx[i] = np.argmin(k0[:, 0] + 2 * np.sum(k0[:, 1:(i + 1)], axis=1))
-        print(f'{i + 1} of {m}')
+        print(f'THIN: {i + 1} of {m}')
     return idx
