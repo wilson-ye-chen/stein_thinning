@@ -13,23 +13,23 @@ smp = np.genfromtxt(join(dir, 'smp.csv'), delimiter=',')
 scr = np.genfromtxt(join(dir, 'scr.csv'), delimiter=',')
 
 # Run Stein Thinning
-x, s = thin(smp, scr, 40)
+iSel = thin(smp, scr, 40)
 
 # Plot point-set over trace
 plt.figure()
 plt.plot(smp[:,0], smp[:,1], color=(0.4, 0.4, 0.4), linewidth=1)
-plt.plot(x[:,0], x[:,1], 'r.', markersize=16)
+plt.plot(smp[iSel, 0], smp[iSel, 1], 'r.', markersize=16)
 
 # Compute KSD
 vfk0 = make_imq(smp, scr, pre='sclmed')
 ks_smp = ksd(smp, scr, vfk0)
-ks_x = ksd(x, s, vfk0)
+ks_x = ksd(smp[iSel], scr[iSel], vfk0)
 
-# Print out the preconditioner matrix
+# Print out the inverse of the preconditioner matrix
 print(make_precon(smp, scr, pre='sclmed'))
 
-# Print out the Stein kernel matrix
-print(kmat(x, s, vfk0))
+# Visualise the Stein kernel matrix
+plt.matshow(kmat(smp[iSel], scr[iSel], vfk0))
 
 # Plot KSD curves
 plt.figure()
