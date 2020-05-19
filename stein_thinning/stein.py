@@ -20,7 +20,7 @@ def vfps(x_new, s_new, x, s, i, vfk0):
         k0ab = np.reshape(vfk0(a, b, sa, sb), (-1, n_new))
         return np.sum(k0ab, axis=0) * 2 + k0aa
     else:
-        return k0aa;
+        return k0aa
 
 def ksd(x, s, vfk0):
     n, d = x.shape
