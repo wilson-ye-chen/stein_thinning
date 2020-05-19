@@ -32,7 +32,7 @@ setting the option string `pre` to either `med`,  `sclmed`, `smpcov`,
 `bayesian`, or `avehess`. For example, the default setting corresponds
 to:
 ```python
-x, g = thin(smpl, grad, 40, pre='sclmed')
+idx = thin(smpl, grad, 40, pre='sclmed')
 ```
 The details for each of the heuristics are documented in Section 3.4 of
 the accompanying paper.
