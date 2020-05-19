@@ -19,11 +19,11 @@ another NumPy array `grad`. One can then perform Stein Thinning to
 obtain a subset of 40 sample points by running the following code:
 ```python
 from stein_thinning.thinning import thin
-x, g = thin(smpl, grad, 40)
+idx = thin(smpl, grad, 40)
 ```
-The `thin` function returns a pair of NumPy arrays, one containing
-the selected samples `x` and their corresponding gradients `g`.
-Please refer to `demo.py` as a starting example.
+The `thin` function returns a NumPy array containing the row indices
+in `smpl` (and `grad`) of the selected points. Please refer to `demo.py`
+as a starting example.
 
 The default usage requires no additional user input and is based on
 the `sclmed` heuristic. Alternatively, the user can choose to specify
