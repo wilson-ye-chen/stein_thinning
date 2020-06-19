@@ -29,8 +29,7 @@ The default usage requires no additional user input and is based on
 the `sclmed` heuristic. Alternatively, the user can choose to specify
 which heuristic to use for computing the preconditioning matrix by
 setting the option string `pre` to either `med`,  `sclmed`, `smpcov`,
-`bayesian`, or `avehess`. For example, the default setting corresponds
-to:
+or `bayesian`. For example, the default setting corresponds to:
 ```python
 idx = thin(smpl, grad, 40, pre='sclmed')
 ```

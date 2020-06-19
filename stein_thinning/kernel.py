@@ -36,8 +36,6 @@ def make_precon(smp, scr, pre='sclmed'):
     elif pre == 'bayesian':
         c = np.cov(smp, rowvar=False)
         linv = inv(1 / (sz - dm - 1) * (np.identity(dm) + (sz - 1) * c))
-    elif pre == 'avehess':
-        linv = np.dot(scr.T, scr) / sz
     elif isfloat(pre):
         linv = inv(float(pre) * np.identity(dm))
     else:
