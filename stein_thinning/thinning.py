@@ -11,9 +11,9 @@ def thin(smp, scr, m, pre='sclmed'):
     scr - n x d array where each row is a gradient of the log target.
     m   - integer specifying the desired number of points.
     pre - string specifying the heuristic for computing the preconditioning
-          matrix, either 'med', 'sclmed', 'smpcov', or 'bayesian'.
-          Alternatively, a numeric string can be passed as the single
-          length-scale parameter of an isotropic kernel.
+          matrix, either 'med', 'sclmed', or 'smpcov'. Alternatively, a
+          numeric string can be passed as the single length-scale parameter
+          of an isotropic kernel.
 
     Returns:
     array shaped (m,) containing the row indices in smp (and scr) of the

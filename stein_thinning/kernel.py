@@ -33,9 +33,6 @@ def make_precon(smp, scr, pre='sclmed'):
         linv = inv(med2(m) / np.log(np.minimum(m, sz)) * np.identity(dm))
     elif pre == 'smpcov':
         linv = inv(np.cov(smp, rowvar=False))
-    elif pre == 'bayesian':
-        c = np.cov(smp, rowvar=False)
-        linv = inv(1 / (sz - dm - 1) * (np.identity(dm) + (sz - 1) * c))
     elif isfloat(pre):
         linv = inv(float(pre) * np.identity(dm))
     else:
