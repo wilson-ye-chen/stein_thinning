@@ -1,19 +1,21 @@
 import numpy as np
 from stein_thinning.kernel import make_imq
 
-def thin(smp, scr, m, pre='sclmed'):
+def thin(smp, scr, m, stnd=True, pre='id'):
     """
     Optimally select m points from n > m samples generated from a target
     distribution of d dimensions.
 
     Args:
-    smp - n x d array where each row is a sample point.
-    scr - n x d array where each row is a gradient of the log target.
-    m   - integer specifying the desired number of points.
-    pre - string specifying the heuristic for computing the preconditioning
-          matrix, either 'med', 'sclmed', or 'smpcov'. Alternatively, a
-          numeric string can be passed as the single length-scale parameter
-          of an isotropic kernel.
+    smp  - n x d array where each row is a sample point.
+    scr  - n x d array where each row is a gradient of the log target.
+    m    - integer specifying the desired number of points.
+    stnd - optional logical, either 'True' (default) or 'False', indicating
+           whether or not to standardise the colums of smp.
+    pre  - optional string, either 'id' (default), 'med', 'sclmed', or
+           'smpcov', specifying the preconditioner to be used. Alternatively,
+           a numeric string can be passed as the single length-scale parameter
+           of an isotropic kernel.
 
     Returns:
     array shaped (m,) containing the row indices in smp (and scr) of the

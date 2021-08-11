@@ -2,6 +2,7 @@
 
 import numpy as np
 from numpy.linalg import inv
+from numpy.linalg import eig
 from scipy.spatial.distance import pdist
 from stein_thinning.util import isfloat
 
@@ -13,7 +14,7 @@ def vfk0_imq(a, b, sa, sb, linv):
     t3 = np.sum(sa.T * sb.T, axis=0) / (qf ** 0.5)
     return t1 + t2 + t3
 
-def make_precon(smp, scr, pre='sclmed'):
+def make_precon(smp, scr, pre='id'):
     # Sample size and dimension
     sz, dm = smp.shape
 
@@ -27,19 +28,30 @@ def make_precon(smp, scr, pre='sclmed'):
 
     # Select preconditioner
     m = 1000
-    if pre == 'med':
-        linv = inv(med2(m) * np.identity(dm))
+    if pre == 'id':
+        linv = np.identity(dm)
+    elif pre == 'med':
+        m2 = med2(m)
+        if m2 == 0:
+            raise Exception('Too few unique samples in smp.')
+        linv = inv(m2 * np.identity(dm))
     elif pre == 'sclmed':
-        linv = inv(med2(m) / np.log(np.minimum(m, sz)) * np.identity(dm))
+        m2 = med2(m)
+        if m2 == 0:
+            raise Exception('Too few unique samples in smp.')
+        linv = inv(m2 / np.log(np.minimum(m, sz)) * np.identity(dm))
     elif pre == 'smpcov':
-        linv = inv(np.cov(smp, rowvar=False))
+        c = np.cov(smp, rowvar=False)
+        if not all(eig(c)[0] > 0):
+            raise Exception('Too few unique samples in smp.')
+        linv = inv(c)
     elif isfloat(pre):
         linv = inv(float(pre) * np.identity(dm))
     else:
-        raise ValueError('incorrect preconditioner type.')
+        raise ValueError('Incorrect preconditioner type.')
     return linv
 
-def make_imq(smp, scr, pre='sclmed'):
+def make_imq(smp, scr, pre='id'):
     linv = make_precon(smp, scr, pre)
     def vfk0(a, b, sa, sb):
         return vfk0_imq(a, b, sa, sb, linv)
