@@ -24,10 +24,11 @@ def thin(smp, scr, m, stnd=True, pre='id'):
 
     # Standardisation
     if stnd:
-        scl = np.mean(np.abs(smp), axis=0)
+        loc = np.mean(smp, axis=0)
+        scl = np.mean(np.abs(smp - loc), axis=0)
         if min(scl) == 0:
             raise Exception('Too few unique samples in smp.')
-        smp = smp / scl
+        smp = (smp - loc) / scl
         scr = scr * scl
 
     # Vectorised Stein kernel function
