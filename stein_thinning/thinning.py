@@ -21,6 +21,18 @@ def thin(smp, scr, m, stnd=True, pre='id'):
     array shaped (m,) containing the row indices in smp (and scr) of the
     selected points.
     """
+    # Argument checks
+    if smp.ndim != 2 or scr.ndim != 2:
+        raise Exception('smp or scr is not two-dimensional.')
+    n, d = smp.shape
+    if n == 0 or d == 0:
+        raise Exception('smp is empty.')
+    if scr.shape[0] != n or scr.shape[1] != d:
+        raise Exception('Dimensions of smp and scr are inconsistent.')
+    if np.sum(np.isnan(smp)) + np.sum(np.isnan(scr)) > 0:
+        raise Exception('smp or scr contains NaNs.')
+    if np.sum(np.isinf(smp)) + np.sum(np.isinf(scr)) > 0:
+        raise Exception('smp or scr contains infs.')
 
     # Standardisation
     if stnd:
@@ -28,14 +40,13 @@ def thin(smp, scr, m, stnd=True, pre='id'):
         scl = np.mean(np.abs(smp - loc), axis=0)
         if min(scl) == 0:
             raise Exception('Too few unique samples in smp.')
-        smp = (smp - loc) / scl
+        smp = smp / scl
         scr = scr * scl
 
     # Vectorised Stein kernel function
     vfk0 = make_imq(smp, scr, pre)
 
     # Pre-allocate arrays
-    n = smp.shape[0]
     k0 = np.empty((n, m))
     idx = np.empty(m, dtype=np.uint32)
 
