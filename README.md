@@ -30,8 +30,8 @@ the identity (`id`) preconditioning matrix and standardised sample.
 Alternatively, the user can choose to specify which heuristic to use
 for computing the preconditioning matrix by setting the option string
 to either `id`, `med`,  `sclmed`, or `smpcov`. Standardisation can be
-disabled by setting the fourth argument to `false`. For example, the
-default setting corresponds to:
+disabled by setting `stnd=False`. For example, the default setting
+corresponds to:
 ```python
 idx = thin(smpl, grad, 40, stnd=True, pre='id')
 ```
