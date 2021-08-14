@@ -26,20 +26,23 @@ in `smpl` (and `grad`) of the selected points. Please refer to `demo.py`
 as a starting example.
 
 The default usage requires no additional user input and is based on
-the `sclmed` heuristic. Alternatively, the user can choose to specify
-which heuristic to use for computing the preconditioning matrix by
-setting the option string `pre` to either `med`,  `sclmed`, or `smpcov`.
-For example, the default setting corresponds to:
+the identity (`id`) preconditioning matrix and standardised sample.
+Alternatively, the user can choose to specify which heuristic to use
+for computing the preconditioning matrix by setting the option string
+to either `id`, `med`,  `sclmed`, or `smpcov`. Standardisation can be
+disabled by setting the fourth argument to `false`. For example, the
+default setting corresponds to:
 ```python
-idx = thin(smpl, grad, 40, pre='sclmed')
+idx = thin(smpl, grad, 40, stnd=True, pre='id')
 ```
-The details for each of the heuristics are documented in Section 3.4 of
+The details for each of the heuristics are documented in Section 2.3 of
 the accompanying paper.
 
 # PyStan Example
 As an illustration of how Stein Thinning can be used to post-process
-output from Stan, consider the following simple Stan script that produces
-correlated samples from a bivariate Gaussian model:
+output from [Stan](https://mc-stan.org/users/interfaces/pystan), consider
+the following simple Stan script that produces correlated samples from a
+bivariate Gaussian model:
 ```python
 from pystan import StanModel
 mc = """
@@ -57,5 +60,6 @@ log-posterior gradients can be extracted from the returned `fit` object:
 import numpy as np
 smpl = fit['x']
 grad = np.apply_along_axis(fit.grad_log_prob, 1, smpl)
+idx = thin(smpl, grad, 40)
 ```
 The above example can be found in `pystan/demo.py`.
