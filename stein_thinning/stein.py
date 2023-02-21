@@ -22,7 +22,7 @@ def vfps(x_new, s_new, x, s, i, vfk0):
     else:
         return k0aa
 
-def ksd(x, s, vfk0):
+def ksd(x, s, vfk0, verb=False):
     """
     Compute a cumulative sequence of KSD values.
 
@@ -30,6 +30,8 @@ def ksd(x, s, vfk0):
     x    - n x d array where each row is a d-dimensional sample point.
     s    - n x d array where each row is a gradient of the log target.
     vfk0 - vectorised Stein kernel function.
+    verb - optional logical, either 'True' or 'False' (default), indicating
+           whether or not to be verbose about the KSD evaluation progress.
 
     Returns:
     array shaped (n,) containing the sequence of KSD values.
@@ -44,7 +46,8 @@ def ksd(x, s, vfk0):
         k0 = vfk0(x_i, x[0:(i + 1)], s_i, s[0:(i + 1)])
         ps += 2 * np.sum(k0[0:i]) + k0[i]
         ks[i] = np.sqrt(ps) / (i + 1)
-        print(f'KSD: {i + 1} of {n}')
+        if verb:
+            print(f'KSD: {i + 1} of {n}')
     return ks
 
 def kmat(x, s, vfk0):
