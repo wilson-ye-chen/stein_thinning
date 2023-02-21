@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='stein_thinning',
-    version='1.0',
+    version='1.1',
     description='Optimally compress sampling algorithm outputs',
     url='https://github.com/wilson-ye-chen/stein_thinning',
     author='Stein Thinning team',
