@@ -62,4 +62,13 @@ sample = fit['x'].T
 gradient = np.apply_along_axis(lambda x: sm.grad_log_prob(x.tolist()), 1, sample)
 idx = thin(sample, gradient, 40)
 ```
+The selected points can then be plotted:
+```python
+plt.figure()
+plt.scatter(sample[:, 0], sample[:, 1], color='lightgray')
+plt.scatter(sample[idx, 0], sample[idx, 1], color='red')
+plt.show()
+```
+![Stein Thinning Demo Results](stein_thinning/pystan/demo.png?raw=true)
+
 The above example can be found in `pystan/demo.py`.
