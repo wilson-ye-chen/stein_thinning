@@ -2,7 +2,8 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from pystan import StanModel
+
+import stan
 from stein_thinning.thinning import thin
 
 # Simple bivariate Gaussian model
@@ -10,18 +11,18 @@ mc = """
 parameters {vector[2] x;}
 model {x ~ multi_normal([0, 0], [[1, 0.8], [0.8, 1]]);}
 """
-sm = StanModel(model_code=mc)
-fit = sm.sampling(iter=1000)
+sm = stan.build(mc, random_seed=12345)
+fit = sm.sample(num_samples=1000)
 
 # Extract sampled points and gradients
-smp = fit['x']
-scr = np.apply_along_axis(fit.grad_log_prob, 1, smp)
+sample = fit['x'].T
+gradient = np.apply_along_axis(lambda x: sm.grad_log_prob(x.tolist()), 1, sample)
 
 # Obtain a subset of 40 points
-idx = thin(smp, scr, 40)
+idx = thin(sample, gradient, 40)
 
 # Plot point-set over trace
 plt.figure()
-plt.plot(smp[:,0], smp[:,1], color=(0.4, 0.4, 0.4), linewidth=1)
-plt.plot(smp[idx, 0], smp[idx, 1], 'r.', markersize=10)
+plt.scatter(sample[:, 0], sample[:, 1], color='lightgray')
+plt.scatter(sample[idx, 0], sample[idx, 1], color='red')
 plt.show()
