@@ -24,32 +24,6 @@ def vfps(x_new, s_new, x, s, i, vfk0):
     else:
         return k0aa
 
-def ksd(x, s, vfk0, verbose=False):
-    """
-    Compute a cumulative sequence of KSD values.
-
-    Args:
-    x    - n x d array where each row is a d-dimensional sample point.
-    s    - n x d array where each row is a gradient of the log target.
-    vfk0 - vectorised Stein kernel function.
-    verb - optional logical, either 'True' or 'False' (default), indicating
-           whether or not to be verbose about the KSD evaluation progress.
-
-    Returns:
-    array shaped (n,) containing the sequence of KSD values.
-    """
-    n = x.shape[0]
-    ks = np.empty(n)
-    ps = 0.
-    for i in range(n):
-        x_i = np.tile(x[i], (i + 1, 1))
-        s_i = np.tile(s[i], (i + 1, 1))
-        k0 = vfk0(x_i, x[0:(i + 1)], s_i, s[0:(i + 1)])
-        ps += 2 * np.sum(k0[0:i]) + k0[i]
-        ks[i] = np.sqrt(ps) / (i + 1)
-        if verbose:
-            print(f'KSD: {i + 1} of {n}')
-    return ks
 
 def kmat(
         sample: np.ndarray,
@@ -78,10 +52,41 @@ def kmat(
     n = sample.shape[0]
     k0 = np.zeros((n, n))
     ind1, ind2 = np.triu_indices(n)
-    v = stein_kernel(sample[ind1], sample[ind2], gradient[ind1], gradient[ind2])
+    v = stein_kernel(sample[ind1], sample[ind2], gradient[ind1], gradient[ind2]).squeeze()
     k0[ind1, ind2] = v
     k0[ind2, ind1] = v
     return k0
+
+
+def ksd(
+        sample: np.ndarray,
+        gradient: np.ndarray,
+        stein_kernel: Callable[[np.ndarray, np.ndarray, np.ndarray, np.ndarray], float],
+    ) -> np.ndarray:
+    """Compute a cumulative sequence of KSD values.
+
+    KSD values are calculated from sums of elements in each i x i square in the top-left
+    corner of the kernel Stein matrix.
+
+    Parameters
+    ----------
+    sample: np.ndarray
+        n x d array where each row is a d-dimensional sample point.
+    gradient: np.ndarray
+        n x d array where each row is a gradient of the log target.
+    stein_kernel: Callable[[np.ndarray, np.ndarray, np.ndarray, np.ndarray], float]
+        vectorised Stein kernel function.
+
+    Returns
+    -------
+    np.ndarray
+        array shaped (n,) containing the sequence of KSD values.
+    """
+    n = sample.shape[0]
+    km = kmat(sample, gradient, stein_kernel)
+    ind1, ind2 = np.tril_indices(n, -1)  # indices of elements below diagonal
+    ks = np.cumsum(np.diag(km)) + 2 * np.concatenate([[0], np.cumsum(km[ind1, ind2])[np.cumsum(np.arange(1, n)) - 1]])
+    return np.sqrt(ks) / np.arange(1, n + 1)
 
 
 def greedy(d, vfs, vfk0, fmin, n):
