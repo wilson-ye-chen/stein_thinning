@@ -77,11 +77,10 @@ def kmat(
     """
     n = sample.shape[0]
     k0 = np.zeros((n, n))
-    for i in range(n):
-        for j in range(i + 1):
-            v = stein_kernel(sample[i], sample[j], gradient[i], gradient[j])
-            k0[i, j] = v
-            k0[j, i] = v
+    ind1, ind2 = np.triu_indices(n)
+    v = stein_kernel(sample[ind1], sample[ind2], gradient[ind1], gradient[ind2])
+    k0[ind1, ind2] = v
+    k0[ind2, ind1] = v
     return k0
 
 
