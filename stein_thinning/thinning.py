@@ -56,7 +56,7 @@ def thin(
         gradient = gradient * scl
 
     # Vectorised Stein kernel function
-    vfk0 = make_imq(sample, gradient, preconditioner)
+    vfk0 = make_imq(sample, preconditioner)
 
     # Pre-allocate arrays
     k0 = np.empty((n, n_points))

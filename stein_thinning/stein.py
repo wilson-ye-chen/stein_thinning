@@ -9,6 +9,7 @@ def fmin_grid(vf, x, vfs, grid):
     i = np.argmin(val)
     return grid[i], s[i], grid.shape[0]
 
+
 def vfps(x_new, s_new, x, s, i, vfk0):
     k0aa = vfk0(x_new, x_new, s_new, s_new)
     if i > 0:
