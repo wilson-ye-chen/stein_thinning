@@ -6,12 +6,12 @@ from numpy.linalg import eig
 from scipy.spatial.distance import pdist
 
 
-def vfk0_imq(a, b, sa, sb, linv):
+def vfk0_imq(a, b, sa, sb, linv, c=1.0, beta=-0.5):
     amb = a.T - b.T
-    qf = 1 + np.sum(np.dot(linv, amb) * amb, axis=0)
-    t1 = -3 * np.sum(np.dot(np.dot(linv, linv), amb) * amb, axis=0) / (qf ** 2.5)
-    t2 = (np.trace(linv) + np.sum(np.dot(linv, sa.T - sb.T) * amb, axis=0)) / (qf ** 1.5)
-    t3 = np.sum(sa.T * sb.T, axis=0) / (qf ** 0.5)
+    qf = c + np.sum(np.dot(linv, amb) * amb, axis=0)
+    t1 = -4 * beta * (beta - 1) * np.sum(np.dot(np.dot(linv, linv), amb) * amb, axis=0) / (qf ** (-beta + 2))
+    t2 = -2 * beta * (np.trace(linv) + np.sum(np.dot(linv, sa.T - sb.T) * amb, axis=0)) / (qf ** (-beta + 1))
+    t3 = np.sum(sa.T * sb.T, axis=0) / (qf ** (-beta))
     return t1 + t2 + t3
 
 

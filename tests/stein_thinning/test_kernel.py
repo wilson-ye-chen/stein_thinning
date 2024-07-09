@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from stein_thinning.kernel import make_precon
+from stein_thinning.kernel import make_precon, vfk0_imq
 
 
 def test_make_precon():
@@ -30,3 +30,11 @@ def test_make_precon():
 
     with pytest.raises(ValueError):
         precon = make_precon(sample, 'foo')
+
+
+def test_vfk0_imq():
+    x1 = np.array([1., 2., 3.])
+    x2 = np.array([2., 3., 4.])
+    s1 = np.array([0.5, 0.75, 1.5])
+    s2 = np.array([1., 1.5, 3.])
+    np.testing.assert_approx_equal(vfk0_imq(x1, x2, s1, s2, np.identity(3)), 3.5)
