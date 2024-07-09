@@ -6,12 +6,51 @@ from numpy.linalg import eig
 from scipy.spatial.distance import pdist
 
 
-def vfk0_imq(a, b, sa, sb, linv, c=1.0, beta=-0.5):
-    amb = a.T - b.T
-    qf = c + np.sum(np.dot(linv, amb) * amb, axis=0)
-    t1 = -4 * beta * (beta - 1) * np.sum(np.dot(np.dot(linv, linv), amb) * amb, axis=0) / (qf ** (-beta + 2))
-    t2 = -2 * beta * (np.trace(linv) + np.sum(np.dot(linv, sa.T - sb.T) * amb, axis=0)) / (qf ** (-beta + 1))
-    t3 = np.sum(sa.T * sb.T, axis=0) / (qf ** (-beta))
+def vfk0_imq(
+        x: np.ndarray,
+        y: np.ndarray,
+        sx: np.ndarray,
+        sy: np.ndarray,
+        linv: np.ndarray,
+        c: float = 1.0,
+        beta: float = -0.5
+    ) -> np.ndarray:
+    """Evaluate Stein kernel based on inverse multiquadratic kernel
+
+    The Stein kernel is evaluated for pairs of points and requires
+    the values of gradients at the same points to be supplied.
+
+    Parameters
+    ----------
+    x: np.ndarray
+        n x d array where each row is a d-dimensional sample point for the first
+        argument of the kernel.
+    y: np.ndarray
+        n x d array where each row is a d-dimensional sample point for the second
+        argument of the kernel.
+    sx: np.ndarray
+        n x d array where each row is a d-dimensional gradient calculated at
+        the corresponding point in `x`
+    sy: np.ndarray
+        n x d array where each row is a d-dimensional gradient calculated at
+        the corresponding point in `y`
+    linv: np.ndarray
+        d x d preconditioner matrix
+    c: float
+        parameter of the inverse multiquadratic kernel
+    beta: float
+        exponent of the inverse multiquadratic kernel
+
+    Returns
+    -------
+    np.ndarray
+        array of length n with values of the kernel evaluated for each pair of points
+    """
+    xmy = x.T - y.T
+    qf = c + np.sum(np.dot(linv, xmy) * xmy, axis=0)
+    t1 = -4 * beta * (beta - 1) * np.sum(np.dot(np.dot(linv, linv), xmy) * xmy, axis=0) / (qf ** (-beta + 2))
+    t2 = -2 * beta * (np.trace(linv) + np.sum(np.dot(linv, sx.T - sy.T) * xmy, axis=0)) / (qf ** (-beta + 1))
+    t3 = np.sum(sx.T * sy.T, axis=0) / (qf ** (-beta))
     return t1 + t2 + t3
 
 
