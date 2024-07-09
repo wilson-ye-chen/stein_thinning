@@ -4,7 +4,6 @@ import numpy as np
 from numpy.linalg import inv
 from numpy.linalg import eig
 from scipy.spatial.distance import pdist
-from stein_thinning.util import isfloat
 
 
 def vfk0_imq(a, b, sa, sb, linv):
@@ -16,46 +15,68 @@ def vfk0_imq(a, b, sa, sb, linv):
     return t1 + t2 + t3
 
 
-def make_precon(sample, pre='id'):
+def _isfloat(value):
+    """Test if value can be converted to float"""
+    try:
+        float(value)
+        return True
+    except ValueError:
+        return False
+
+
+def make_precon(sample: np.ndarray, preconditioner: str = 'id') -> np.ndarray:
+    """Create preconditioner matrix
+
+    Parameters
+    ----------
+    sample: np.ndarray
+        n x d array where each row is a d-dimensional sample point.
+    preconditioner: str
+        optional string, either 'id' (default), 'med', 'sclmed', or
+        'smpcov', specifying the preconditioner to be used. Alternatively,
+        a numeric string can be passed as the single length-scale parameter
+        of an isotropic kernel.
+
+    Returns
+    -------
+    np.ndarray
+        d x d array containing the preconditioner matrix
+    """
     # Sample size and dimension
-    sz, dm = sample.shape
+    N, d = sample.shape
 
     # Squared pairwise median
-    def med2(m):
-        if sz > m:
-            sub = sample[np.linspace(0, sz - 1, m, dtype=int)]
+    def med2(m: int) -> float:
+        if N > m:
+            sub = sample[np.linspace(0, N - 1, m, dtype=int)]
         else:
             sub = sample
         return np.median(pdist(sub)) ** 2
 
     # Select preconditioner
     m = 1000
-    if pre == 'id':
-        linv = np.identity(dm)
-    elif pre == 'med':
+    if preconditioner == 'id':
+        return np.identity(d)
+    elif preconditioner == 'med':
         m2 = med2(m)
-        if m2 == 0:
-            raise Exception('Too few unique samples in smp.')
-        linv = inv(m2 * np.identity(dm))
-    elif pre == 'sclmed':
+        assert m2 > 0, 'Too few unique samples.'
+        return np.identity(d) / m2
+    elif preconditioner == 'sclmed':
         m2 = med2(m)
-        if m2 == 0:
-            raise Exception('Too few unique samples in smp.')
-        linv = inv(m2 / np.log(np.minimum(m, sz)) * np.identity(dm))
-    elif pre == 'smpcov':
+        assert m2 > 0, 'Too few unique samples.'
+        return np.identity(d) / m2 * np.log(np.minimum(m, N))
+    elif preconditioner == 'smpcov':
         c = np.cov(sample, rowvar=False)
-        if not all(eig(c)[0] > 0):
-            raise Exception('Too few unique samples in smp.')
-        linv = inv(c)
-    elif isfloat(pre):
-        linv = inv(float(pre) * np.identity(dm))
+        assert np.all(eig(c)[0] > 0), 'Covariance matrix of sample is singular.'
+        return inv(c)
+    elif _isfloat(preconditioner):
+        return np.identity(d) / float(preconditioner)
     else:
         raise ValueError('Incorrect preconditioner type.')
-    return linv
 
 
-def make_imq(smp, pre='id'):
-    linv = make_precon(smp, pre)
-    def vfk0(a, b, sa, sb):
-        return vfk0_imq(a, b, sa, sb, linv)
+def make_imq(sample: np.ndarray, preconditioner: str = 'id'):
+    preconditioner = make_precon(sample, preconditioner)
+    def vfk0(sample1, sample2, gradient1, gradient2):
+        return vfk0_imq(sample1, sample2, gradient1, gradient2, preconditioner)
     return vfk0

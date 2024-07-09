@@ -1,7 +1,8 @@
 """Core functions of Stein Points."""
 
+from typing import Callable
+
 import numpy as np
-from stein_thinning.util import mirror_lower
 
 def fmin_grid(vf, x, vfs, grid):
     s = vfs(grid)
@@ -23,7 +24,7 @@ def vfps(x_new, s_new, x, s, i, vfk0):
     else:
         return k0aa
 
-def ksd(x, s, vfk0, verb=False):
+def ksd(x, s, vfk0, verbose=False):
     """
     Compute a cumulative sequence of KSD values.
 
@@ -37,7 +38,6 @@ def ksd(x, s, vfk0, verb=False):
     Returns:
     array shaped (n,) containing the sequence of KSD values.
     """
-
     n = x.shape[0]
     ks = np.empty(n)
     ps = 0.
@@ -47,30 +47,43 @@ def ksd(x, s, vfk0, verb=False):
         k0 = vfk0(x_i, x[0:(i + 1)], s_i, s[0:(i + 1)])
         ps += 2 * np.sum(k0[0:i]) + k0[i]
         ks[i] = np.sqrt(ps) / (i + 1)
-        if verb:
+        if verbose:
             print(f'KSD: {i + 1} of {n}')
     return ks
 
-def kmat(x, s, vfk0):
+def kmat(
+        sample: np.ndarray,
+        gradient: np.ndarray,
+        stein_kernel: Callable[[np.ndarray, np.ndarray, np.ndarray, np.ndarray], float],
+    ) -> np.ndarray:
+    """Compute a Stein kernel matrix
+
+    The matrix is obtained by evaluating the provided Stein kernel
+    on a Cartesian square of `sample`.
+
+    Parameters
+    ----------
+    sample: np.ndarray
+        n x d array where each row is a d-dimensional sample point.
+    gradient: np.ndarray
+        n x d array where each row is a gradient of the log target.
+    stein_kernel: Callable[[np.ndarray, np.ndarray, np.ndarray, np.ndarray], float]
+        vectorised Stein kernel function.
+
+    Returns
+    -------
+    np.ndarray
+        n x n array containing the Stein kernel matrix.
     """
-    Compute a Stein kernel matrix.
-
-    Args:
-    x    - n x d array where each row is a d-dimensional sample point.
-    s    - n x d array where each row is a gradient of the log target.
-    vfk0 - vectorised Stein kernel function.
-
-    Returns:
-    n x n array containing the Stein kernel matrix.
-    """
-
-    n = x.shape[0]
+    n = sample.shape[0]
     k0 = np.zeros((n, n))
     for i in range(n):
         for j in range(i + 1):
-            k0[i, j] = vfk0(x[i], x[j], s[i], s[j])
-    mirror_lower(k0)
+            v = stein_kernel(sample[i], sample[j], gradient[i], gradient[j])
+            k0[i, j] = v
+            k0[j, i] = v
     return k0
+
 
 def greedy(d, vfs, vfk0, fmin, n):
     x = np.empty((n, d))
