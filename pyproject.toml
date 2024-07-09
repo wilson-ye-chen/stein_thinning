@@ -1,0 +1,31 @@
+# pyproject.toml
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stein_thinning"
+version = "0.1.0"
+description = "Optimally compress sampling algorithm outputs"
+readme = "README.md"
+authors = [{ name = "Stein Thinning team" }]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+keywords = ["mcmc", "Stein", "thinning"]
+dependencies = [
+    "numpy",
+    "scipy",
+]
+requires-python = ">=3.9"
+
+[project.optional-dependencies]
+dev = ["pytest"]
+demo = ["matplotlib", "pystan"]
+
+[project.urls]
+Homepage = "https://github.com/wilson-ye-chen/stein_thinning"

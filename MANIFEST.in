@@ -1,0 +1,1 @@
+include stein_thinning/sample_chains/gmm/*.csv
