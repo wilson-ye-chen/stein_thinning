@@ -69,8 +69,8 @@ def thin(
         # TODO: use logging instead
         print(f'THIN: {1} of {n_points}')
     for i in range(1, n_points):
-        smp_last = np.tile(sample[idx[i - 1]], (n, 1))
-        scr_last = np.tile(gradient[idx[i - 1]], (n, 1))
+        smp_last = sample[[idx[i - 1]]]
+        scr_last = gradient[[idx[i - 1]]]
         k0[:, i] = vfk0(sample, smp_last, gradient, scr_last)
         idx[i] = np.argmin(k0[:, 0] + 2 * np.sum(k0[:, 1:(i + 1)], axis=1))
         if verbose:

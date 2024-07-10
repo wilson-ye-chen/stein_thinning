@@ -24,22 +24,26 @@ def vfk0_imq(
     ----------
     x: np.ndarray
         n x d array where each row is a d-dimensional sample point for the first
-        argument of the kernel.
+        argument of the kernel. Alternatively, 1 x d array that will be broadcast
+        with `y`.
     y: np.ndarray
         n x d array where each row is a d-dimensional sample point for the second
-        argument of the kernel.
+        argument of the kernel. Alternatively, 1 x d array that will be broadcast
+        with `x`.
     sx: np.ndarray
         n x d array where each row is a d-dimensional gradient calculated at
-        the corresponding point in `x`
+        the corresponding point in `x`. Alternatively, 1 x d array that will be
+        broadcast with `sy`.
     sy: np.ndarray
         n x d array where each row is a d-dimensional gradient calculated at
-        the corresponding point in `y`
+        the corresponding point in `y`. Alternatively, 1 x d array that will be
+        broadcast with `sx`.
     linv: np.ndarray
-        d x d preconditioner matrix
+        d x d preconditioner matrix.
     c: float
-        parameter of the inverse multiquadratic kernel
+        parameter of the inverse multiquadratic kernel.
     beta: float
-        exponent of the inverse multiquadratic kernel
+        exponent of the inverse multiquadratic kernel.
 
     Returns
     -------
