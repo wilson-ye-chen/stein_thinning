@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import numpy as np
 from stein_thinning.kernel import make_imq
 
@@ -8,7 +11,6 @@ def thin(
         n_points: int,
         standardize: bool = True,
         preconditioner: str = 'id',
-        verbose: bool = False,
 ) -> np.ndarray:
     """Optimally select m points from n > m samples generated from a target distribution of d dimensions.
 
@@ -29,9 +31,6 @@ def thin(
         'smpcov', specifying the preconditioner to be used. Alternatively,
         a numeric string can be passed as the single length-scale parameter
         of an isotropic kernel.
-    verbose: bool
-        optional logical, either 'True' or 'False' (default), indicating
-        whether or not to be verbose about the thinning progress.
 
     Returns
     -------
@@ -64,15 +63,11 @@ def thin(
     # Populate columns of k0 as new points are selected
     k0 = vfk0(sample, sample, gradient, gradient)
     idx[0] = np.argmin(k0)
-    if verbose:
-        # TODO: use logging instead
-        print(f'THIN: {1} of {n_points}')
+    logger.debug('THIN: %d of %d', 1, n_points)
     for i in range(1, n_points):
         smp_last = sample[[idx[i - 1]]]
         scr_last = gradient[[idx[i - 1]]]
         k0 += 2 * vfk0(sample, smp_last, gradient, scr_last)
         idx[i] = np.argmin(k0)
-        if verbose:
-            # TODO: use logging instead
-            print('THIN: %{i + 1} of {n_points}')
+        logger.debug('THIN: %d of %d', i + 1, n_points)
     return idx
