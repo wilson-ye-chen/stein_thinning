@@ -59,20 +59,19 @@ def thin(
     vfk0 = make_imq(sample, preconditioner)
 
     # Pre-allocate arrays
-    k0 = np.empty((n, n_points))
     idx = np.empty(n_points, dtype=np.uint32)
 
     # Populate columns of k0 as new points are selected
-    k0[:, 0] = vfk0(sample, sample, gradient, gradient)
-    idx[0] = np.argmin(k0[:, 0])
+    k0 = vfk0(sample, sample, gradient, gradient)
+    idx[0] = np.argmin(k0)
     if verbose:
         # TODO: use logging instead
         print(f'THIN: {1} of {n_points}')
     for i in range(1, n_points):
         smp_last = sample[[idx[i - 1]]]
         scr_last = gradient[[idx[i - 1]]]
-        k0[:, i] = vfk0(sample, smp_last, gradient, scr_last)
-        idx[i] = np.argmin(k0[:, 0] + 2 * np.sum(k0[:, 1:(i + 1)], axis=1))
+        k0 += 2 * vfk0(sample, smp_last, gradient, scr_last)
+        idx[i] = np.argmin(k0)
         if verbose:
             # TODO: use logging instead
             print('THIN: %{i + 1} of {n_points}')
