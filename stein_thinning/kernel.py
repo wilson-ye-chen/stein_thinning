@@ -13,7 +13,7 @@ def vfk0_imq(
         sy: np.ndarray,
         linv: np.ndarray,
         c: float = 1.0,
-        beta: float = -0.5
+        beta: float = -0.5,
     ) -> np.ndarray:
     """Evaluate Stein kernel based on inverse multiquadratic kernel
 
@@ -41,9 +41,9 @@ def vfk0_imq(
     linv: np.ndarray
         d x d preconditioner matrix.
     c: float
-        parameter of the inverse multiquadratic kernel.
+        parameter of the inverse multiquadratic kernel. Default: 1.0.
     beta: float
-        exponent of the inverse multiquadratic kernel.
+        exponent of the inverse multiquadratic kernel. Default: -0.5.
 
     Returns
     -------

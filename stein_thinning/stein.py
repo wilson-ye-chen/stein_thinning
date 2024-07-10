@@ -1,15 +1,14 @@
 """Kernel matrix functions"""
 
-from typing import Callable
+from typing import Any, Callable
 
 import numpy as np
 
 
-def kmat(
-        sample: np.ndarray,
-        gradient: np.ndarray,
-        stein_kernel: Callable[[np.ndarray, np.ndarray, np.ndarray, np.ndarray], float],
-    ) -> np.ndarray:
+IndexerT = Any
+
+
+def kmat(integrand: Callable[[IndexerT, IndexerT], np.ndarray], n: int) -> np.ndarray:
     """Compute a Stein kernel matrix
 
     The matrix is obtained by evaluating the provided Stein kernel
@@ -17,32 +16,26 @@ def kmat(
 
     Parameters
     ----------
-    sample: np.ndarray
-        n x d array where each row is a d-dimensional sample point.
-    gradient: np.ndarray
-        n x d array where each row is a gradient of the log target.
-    stein_kernel: Callable[[np.ndarray, np.ndarray, np.ndarray, np.ndarray], float]
-        vectorised Stein kernel function.
+    integrand: Callable[[IndexerT, IndexerT], np.ndarray]
+        vectorised function returning the values of the integrand in the KSD
+        integral for the given indices (rows and columns).
+    n: int
+        size of the matrix to return
 
     Returns
     -------
     np.ndarray
         n x n array containing the Stein kernel matrix.
     """
-    n = sample.shape[0]
     k0 = np.zeros((n, n))
     ind1, ind2 = np.triu_indices(n)
-    v = stein_kernel(sample[ind1], sample[ind2], gradient[ind1], gradient[ind2]).squeeze()
+    v = integrand(ind1, ind2).squeeze()
     k0[ind1, ind2] = v
     k0[ind2, ind1] = v
     return k0
 
 
-def ksd(
-        sample: np.ndarray,
-        gradient: np.ndarray,
-        stein_kernel: Callable[[np.ndarray, np.ndarray, np.ndarray, np.ndarray], float],
-    ) -> np.ndarray:
+def ksd(integrand: Callable[[IndexerT, IndexerT], np.ndarray], n: int) -> np.ndarray:
     """Compute a cumulative sequence of KSD values.
 
     KSD values are calculated from sums of elements in each i x i square in the top-left
@@ -50,20 +43,18 @@ def ksd(
 
     Parameters
     ----------
-    sample: np.ndarray
-        n x d array where each row is a d-dimensional sample point.
-    gradient: np.ndarray
-        n x d array where each row is a gradient of the log target.
-    stein_kernel: Callable[[np.ndarray, np.ndarray, np.ndarray, np.ndarray], float]
-        vectorised Stein kernel function.
+    integrand: Callable[[IndexerT, IndexerT], np.ndarray]
+        vectorised function returning the values of the integrand in the KSD
+        integral for the given indices (rows and columns).
+    n: int
+        number of terms to calculate
 
     Returns
     -------
     np.ndarray
         array shaped (n,) containing the sequence of KSD values.
     """
-    n = sample.shape[0]
-    km = kmat(sample, gradient, stein_kernel)
+    km = kmat(integrand, n)
     ind1, ind2 = np.tril_indices(n, -1)  # indices of elements below diagonal
     ks = np.cumsum(np.diag(km)) + 2 * np.concatenate([[0], np.cumsum(km[ind1, ind2])[np.cumsum(np.arange(1, n)) - 1]])
     return np.sqrt(ks) / np.arange(1, n + 1)
