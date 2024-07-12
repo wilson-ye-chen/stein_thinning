@@ -49,8 +49,8 @@ mc = """
 parameters {vector[2] x;}
 model {x ~ multi_normal([0, 0], [[1, 0.8], [0.8, 1]]);}
 """
-sm = StanModel(model_code=mc)
-fit = sm.sampling(iter=1000)
+sm = stan.build(mc, random_seed=12345)
+fit = sm.sample(num_samples=1000)
 ```
 The bivariate Gaussian model is used for illustration, but regardless of
 the complexity of the model being sampled the output of Stan will always
@@ -58,8 +58,17 @@ be a `fit` object (StanFit instance). The sampled points and the
 log-posterior gradients can be extracted from the returned `fit` object:
 ```python
 import numpy as np
-smpl = fit['x']
-grad = np.apply_along_axis(fit.grad_log_prob, 1, smpl)
-idx = thin(smpl, grad, 40)
+sample = fit['x'].T
+gradient = np.apply_along_axis(lambda x: sm.grad_log_prob(x.tolist()), 1, sample)
+idx = thin(sample, gradient, 40)
 ```
+The selected points can then be plotted:
+```python
+plt.figure()
+plt.scatter(sample[:, 0], sample[:, 1], color='lightgray')
+plt.scatter(sample[idx, 0], sample[idx, 1], color='red')
+plt.show()
+```
+![Stein Thinning Demo Results](stein_thinning/pystan/demo.png?raw=true)
+
 The above example can be found in `pystan/demo.py`.

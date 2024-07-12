@@ -2,3 +2,7 @@
 *.egg-info
 __pycache__/
 dist/
+
+.venv
+build
+.vscode

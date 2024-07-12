@@ -21,12 +21,12 @@ plt.plot(smp[:,0], smp[:,1], color=(0.4, 0.4, 0.4), linewidth=1)
 plt.plot(smp[idx, 0], smp[idx, 1], 'r.', markersize=16)
 
 # Compute KSD
-vfk0 = make_imq(smp, scr, pre='sclmed')
+vfk0 = make_imq(smp, preconditioner='sclmed')
 ks_smp = ksd(smp, scr, vfk0)
 ks_x = ksd(smp[idx], scr[idx], vfk0)
 
 # Print out the inverse of the preconditioner matrix
-print(make_precon(smp, scr, pre='sclmed'))
+print(make_precon(smp, preconditioner='sclmed'))
 
 # Visualise the Stein kernel matrix
 plt.matshow(kmat(smp[idx], scr[idx], vfk0))
