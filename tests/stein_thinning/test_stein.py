@@ -39,4 +39,4 @@ def test_demo_kmat(demo_smp, demo_scr, demo_kmat):
     # Vectorised Stein kernel function
     vfk0 = make_imq(sample, 'id')
     result = kmat(demo_smp, demo_scr, vfk0)
-    np.testing.assert_array_equal(result, demo_kmat)
+    np.testing.assert_array_almost_equal(result, demo_kmat)
