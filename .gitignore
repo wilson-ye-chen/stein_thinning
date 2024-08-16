@@ -6,3 +6,6 @@ dist/
 .venv
 build
 .vscode
+
+docs/build
+docs/source/_autosummary

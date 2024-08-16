@@ -24,7 +24,7 @@ dependencies = [
 requires-python = ">=3.9"
 
 [project.optional-dependencies]
-dev = ["pytest", "bumpver"]
+dev = ["pytest", "bumpver", "sphinx"]
 demo = ["matplotlib", "pystan"]
 
 [project.urls]
