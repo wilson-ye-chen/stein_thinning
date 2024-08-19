@@ -3,3 +3,4 @@ scipy
 matplotlib
 pystan
 pytest
+myst_parser
