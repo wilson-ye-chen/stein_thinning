@@ -75,6 +75,5 @@ plt.scatter(sample[:, 0], sample[:, 1], color='lightgray')
 plt.scatter(sample[idx, 0], sample[idx, 1], color='red')
 plt.show()
 ```
-![Stein Thinning Demo Results](stein_thinning/pystan/demo.png?raw=true)
 
 The above example can be found in `pystan/demo.py`.
