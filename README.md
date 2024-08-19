@@ -5,8 +5,14 @@ Please see the accompanying paper "Optimal Thinning of MCMC Output"
 ([arXiv](https://arxiv.org/pdf/2005.03952.pdf)) for details of the
 algorithm.
 
-# Installing via Git
-One can pip install the package directly from this repository:
+# Installing the package
+
+The latest stable version can be installed via pip:
+```
+pip install stein-thinning
+```
+
+To install the current development version, use this command:
 ```
 pip install git+https://github.com/wilson-ye-chen/stein_thinning
 ```
