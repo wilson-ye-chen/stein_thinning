@@ -6,4 +6,6 @@ API
    :template: custom-module-template.rst
    :recursive:
 
-    stein_thinning
+    stein_thinning.kernel
+    stein_thinning.stein
+    stein_thinning.thinning
