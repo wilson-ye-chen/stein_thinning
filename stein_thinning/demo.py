@@ -7,34 +7,35 @@ from stein_thinning.stein import ksd, kmat
 from stein_thinning.thinning import thin
 from stein_thinning.kernel import make_imq, make_precon
 
-# Read MCMC output from files
-dir = join(dirname(__file__), 'sample_chains/gmm')
-smp = np.genfromtxt(join(dir, 'smp.csv'), delimiter=',')
-scr = np.genfromtxt(join(dir, 'scr.csv'), delimiter=',')
+if __name__ == '__main__':
+    # Read MCMC output from files
+    dir = join(dirname(__file__), 'sample_chains/gmm')
+    smp = np.genfromtxt(join(dir, 'smp.csv'), delimiter=',')
+    scr = np.genfromtxt(join(dir, 'scr.csv'), delimiter=',')
 
-# Run Stein Thinning
-idx = thin(smp, scr, 40)
+    # Run Stein Thinning
+    idx = thin(smp, scr, 40)
 
-# Plot point-set over trace
-plt.figure()
-plt.plot(smp[:,0], smp[:,1], color=(0.4, 0.4, 0.4), linewidth=1)
-plt.plot(smp[idx, 0], smp[idx, 1], 'r.', markersize=16)
+    # Plot point-set over trace
+    plt.figure()
+    plt.plot(smp[:,0], smp[:,1], color=(0.4, 0.4, 0.4), linewidth=1)
+    plt.plot(smp[idx, 0], smp[idx, 1], 'r.', markersize=16)
 
-# Compute KSD
-vfk0 = make_imq(smp, preconditioner='sclmed')
-ks_smp = ksd(smp, scr, vfk0)
-ks_x = ksd(smp[idx], scr[idx], vfk0)
+    # Compute KSD
+    vfk0 = make_imq(smp, preconditioner='sclmed')
+    ks_smp = ksd(smp, scr, vfk0)
+    ks_x = ksd(smp[idx], scr[idx], vfk0)
 
-# Print out the inverse of the preconditioner matrix
-print(make_precon(smp, preconditioner='sclmed'))
+    # Print out the inverse of the preconditioner matrix
+    print(make_precon(smp, preconditioner='sclmed'))
 
-# Visualise the Stein kernel matrix
-plt.matshow(kmat(smp[idx], scr[idx], vfk0))
+    # Visualise the Stein kernel matrix
+    plt.matshow(kmat(smp[idx], scr[idx], vfk0))
 
-# Plot KSD curves
-plt.figure()
-h = np.log(range(1, ks_smp.size + 1))
-plt.plot(h, np.log(ks_smp), 'k-', linewidth=2)
-h = np.log(range(1, ks_x.size + 1))
-plt.plot(h, np.log(ks_x), 'r-', linewidth=2)
-plt.show()
+    # Plot KSD curves
+    plt.figure()
+    h = np.log(range(1, ks_smp.size + 1))
+    plt.plot(h, np.log(ks_smp), 'k-', linewidth=2)
+    h = np.log(range(1, ks_x.size + 1))
+    plt.plot(h, np.log(ks_x), 'r-', linewidth=2)
+    plt.show()
