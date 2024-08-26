@@ -21,7 +21,7 @@ dependencies = [
     "numpy",
     "scipy",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.7"
 
 [project.optional-dependencies]
 dev = ["pytest", "bumpver", "sphinx"]
