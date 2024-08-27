@@ -1,4 +1,4 @@
-# Stein Thinning documentation
+# Stein Thinning
 
 ### About
 Stein Thinning is a tool for post-processing the output of a sampling procedure,
@@ -21,11 +21,15 @@ In favourable circumstances, Stein Thinning is able to:
 ### API Documentation
 
 ```{eval-rst}
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+.. autosummary::
+   :toctree: _autosummary
+   :template: custom-module-template.rst
+   :caption: Modules:
+   :recursive:
 
-   api
+    stein_thinning.kernel
+    stein_thinning.stein
+    stein_thinning.thinning
 ```
 
 ### Installation

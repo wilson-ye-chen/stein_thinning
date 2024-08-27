@@ -4,3 +4,4 @@ matplotlib
 pystan
 pytest
 myst_parser
+sphinx-book-theme
