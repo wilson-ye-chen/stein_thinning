@@ -1,4 +1,4 @@
-"""Kernel functions."""
+"""Kernel definitions"""
 
 import numpy as np
 from numpy.linalg import inv

@@ -1,3 +1,5 @@
+"""Implementation of Stein thinning"""
+
 import logging
 logger = logging.getLogger(__name__)
 

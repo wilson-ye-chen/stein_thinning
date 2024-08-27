@@ -1,4 +1,4 @@
-"""Core functions of Stein Points."""
+"""Kernel matrix functions"""
 
 from typing import Callable
 
