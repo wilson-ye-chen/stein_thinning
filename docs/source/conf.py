@@ -39,6 +39,7 @@ exclude_patterns = []
 #
 html_theme = 'sphinx_book_theme'
 html_static_path = ['_static']
+html_extra_path = ['CNAME']
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
