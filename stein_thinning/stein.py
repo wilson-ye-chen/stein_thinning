@@ -54,7 +54,10 @@ def ksd(integrand: Callable[[IndexerT, IndexerT], np.ndarray], n: int) -> np.nda
     np.ndarray
         array shaped (n,) containing the sequence of KSD values.
     """
-    km = kmat(integrand, n)
-    ind1, ind2 = np.tril_indices(n, -1)  # indices of elements below diagonal
-    ks = np.cumsum(np.diag(km)) + 2 * np.concatenate([[0], np.cumsum(km[ind1, ind2])[np.cumsum(np.arange(1, n)) - 1]])
-    return np.sqrt(ks) / np.arange(1, n + 1)
+    assert n > 0
+    cum_sum = np.zeros(n)
+    cum_sum[0] = integrand(0, 0)
+    for i in range(1, n):
+        vals = integrand([i], slice(0, i + 1))
+        cum_sum[i] = cum_sum[i - 1] + 2 * np.sum(vals) - vals[-1]
+    return np.sqrt(cum_sum) / np.arange(1, n + 1)
