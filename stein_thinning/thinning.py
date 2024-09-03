@@ -122,7 +122,7 @@ def _make_stein_gf_integrand(
     log_q_m_p = log_q - log_p
 
     WEIGHT_SCALE_THRESHOLD = 10
-    if np.max(np.abs(log_q_m_p)) > WEIGHT_SCALE_THRESHOLD:
+    if np.ptp(log_q_m_p) > WEIGHT_SCALE_THRESHOLD:
         warnings.warn(f'log_q differs from log_p by more than {WEIGHT_SCALE_THRESHOLD} - consider using q that matches target better')
 
     log_q_m_p -= np.min(log_q_m_p)
