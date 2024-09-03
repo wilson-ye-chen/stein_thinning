@@ -172,6 +172,7 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="stein_thinning.thinning.html">stein_thinning.thinning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="stein_thinning.thinning.thin.html">stein_thinning.thinning.thin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stein_thinning.thinning.thin_gf.html">stein_thinning.thinning.thin_gf</a></li>
 </ul>
 </details></li>
 </ul>
@@ -353,18 +354,17 @@ document.write(`
 <h1>stein_thinning.stein.kmat<a class="headerlink" href="#stein-thinning-stein-kmat" title="Permalink to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="stein_thinning.stein.kmat">
-<span class="sig-prename descclassname"><span class="pre">stein_thinning.stein.</span></span><span class="sig-name descname"><span class="pre">kmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stein_kernel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#stein_thinning.stein.kmat" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">stein_thinning.stein.</span></span><span class="sig-name descname"><span class="pre">kmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">integrand</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#stein_thinning.stein.kmat" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute a Stein kernel matrix</p>
 <p>The matrix is obtained by evaluating the provided Stein kernel
 on a Cartesian square of <cite>sample</cite>.</p>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">#</a></h2>
 <dl class="simple">
-<dt>sample: np.ndarray</dt><dd><p>n x d array where each row is a d-dimensional sample point.</p>
+<dt>integrand: Callable[[IndexerT, IndexerT], np.ndarray]</dt><dd><p>vectorised function returning the values of the integrand in the KSD
+integral for the given indices (rows and columns).</p>
 </dd>
-<dt>gradient: np.ndarray</dt><dd><p>n x d array where each row is a gradient of the log target.</p>
-</dd>
-<dt>stein_kernel: Callable[[np.ndarray, np.ndarray, np.ndarray, np.ndarray], float]</dt><dd><p>vectorised Stein kernel function.</p>
+<dt>n: int</dt><dd><p>size of the matrix to return</p>
 </dd>
 </dl>
 </section>

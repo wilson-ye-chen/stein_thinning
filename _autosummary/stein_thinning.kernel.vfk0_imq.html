@@ -172,6 +172,7 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="stein_thinning.thinning.html">stein_thinning.thinning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="stein_thinning.thinning.thin.html">stein_thinning.thinning.thin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stein_thinning.thinning.thin_gf.html">stein_thinning.thinning.thin_gf</a></li>
 </ul>
 </details></li>
 </ul>
@@ -378,9 +379,9 @@ broadcast with <cite>sx</cite>.</p>
 </dd>
 <dt>linv: np.ndarray</dt><dd><p>d x d preconditioner matrix.</p>
 </dd>
-<dt>c: float</dt><dd><p>parameter of the inverse multiquadratic kernel.</p>
+<dt>c: float</dt><dd><p>parameter of the inverse multiquadratic kernel. Default: 1.0.</p>
 </dd>
-<dt>beta: float</dt><dd><p>exponent of the inverse multiquadratic kernel.</p>
+<dt>beta: float</dt><dd><p>exponent of the inverse multiquadratic kernel. Default: -0.5.</p>
 </dd>
 </dl>
 </section>

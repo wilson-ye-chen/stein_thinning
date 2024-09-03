@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>stein_thinning.thinning.thin &#8212; Stein Thinning 0.1 documentation</title>
+    <title>stein_thinning.thinning.thin_gf &#8212; Stein Thinning 0.1 documentation</title>
   
   
   
@@ -41,11 +41,10 @@
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_autosummary/stein_thinning.thinning.thin';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_autosummary/stein_thinning.thinning.thin_gf';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="stein_thinning.thinning.thin_gf" href="stein_thinning.thinning.thin_gf.html" />
-    <link rel="prev" title="stein_thinning.thinning" href="stein_thinning.thinning.html" />
+    <link rel="prev" title="stein_thinning.thinning.thin" href="stein_thinning.thinning.thin.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -171,8 +170,8 @@
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="stein_thinning.thinning.html">stein_thinning.thinning</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">stein_thinning.thinning.thin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="stein_thinning.thinning.thin_gf.html">stein_thinning.thinning.thin_gf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stein_thinning.thinning.thin.html">stein_thinning.thinning.thin</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">stein_thinning.thinning.thin_gf</a></li>
 </ul>
 </details></li>
 </ul>
@@ -244,7 +243,7 @@
       
       
       
-      <li><a href="../_sources/_autosummary/stein_thinning.thinning.thin.rst" target="_blank"
+      <li><a href="../_sources/_autosummary/stein_thinning.thinning.thin_gf.rst" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -328,7 +327,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>stein_thinning.thinning.thin</h1>
+    <h1>stein_thinning.thinning.thin_gf</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -338,7 +337,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stein_thinning.thinning.thin"><code class="docutils literal notranslate"><span class="pre">thin()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stein_thinning.thinning.thin_gf"><code class="docutils literal notranslate"><span class="pre">thin_gf()</span></code></a></li>
 </ul>
             </nav>
         </div>
@@ -350,18 +349,29 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="stein-thinning-thinning-thin">
-<h1>stein_thinning.thinning.thin<a class="headerlink" href="#stein-thinning-thinning-thin" title="Permalink to this heading">#</a></h1>
+  <section id="stein-thinning-thinning-thin-gf">
+<h1>stein_thinning.thinning.thin_gf<a class="headerlink" href="#stein-thinning-thinning-thin-gf" title="Permalink to this heading">#</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="stein_thinning.thinning.thin">
-<span class="sig-prename descclassname"><span class="pre">stein_thinning.thinning.</span></span><span class="sig-name descname"><span class="pre">thin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preconditioner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'id'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#stein_thinning.thinning.thin" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="stein_thinning.thinning.thin_gf">
+<span class="sig-prename descclassname"><span class="pre">stein_thinning.thinning.</span></span><span class="sig-name descname"><span class="pre">thin_gf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preconditioner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'id'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range_cap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#stein_thinning.thinning.thin_gf" title="Permalink to this definition">#</a></dt>
 <dd><p>Optimally select m points from n &gt; m samples generated from a target distribution of d dimensions.</p>
+<p>This function is based on the gradient-free kernel Stein discrepancy,
+which uses an auxiliary distribution q as a proxy for the target distribution.
+This is useful when the gradient of the target distribution is difficult to obtain,
+so instead the gradient of the proxy distribution is used.</p>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">#</a></h2>
 <dl class="simple">
 <dt>sample: np.ndarray</dt><dd><p>n x d array where each row is a sample point.</p>
 </dd>
-<dt>gradient: np.ndarray</dt><dd><p>n x d array where each row is a gradient of the log target.</p>
+<dt>log_p: np.ndarray</dt><dd><p>n x 1 array of log-pdf values for the target distribution corresponding
+to points in <cite>sample</cite>.</p>
+</dd>
+<dt>log_q: np.ndarray</dt><dd><p>n x 1 array of log-pdf values for the proxy distribution corresponding
+to points in <cite>sample</cite>.</p>
+</dd>
+<dt>gradient_q: np.ndarray</dt><dd><p>n x d array of gradient of the proxy distribution corresponding to points
+in <cite>sample</cite>.</p>
 </dd>
 <dt>n_points: int</dt><dd><p>integer specifying the desired number of points.</p>
 </dd>
@@ -373,6 +383,9 @@ using the mean absolute deviation from the mean as the scale.</p>
 ‘smpcov’, specifying the preconditioner to be used. Alternatively,
 a numeric string can be passed as the single length-scale parameter
 of an isotropic kernel.</p>
+</dd>
+<dt>range_cap: Optional[float]</dt><dd><p>if provided, the values of <cite>log_q - log_p</cite> will be clipped above, so that
+the resulting range is at most <cite>range_cap</cite></p>
 </dd>
 </dl>
 </section>
@@ -400,22 +413,13 @@ selected points.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="stein_thinning.thinning.html"
+       href="stein_thinning.thinning.thin.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">stein_thinning.thinning</p>
+        <p class="prev-next-title">stein_thinning.thinning.thin</p>
       </div>
-    </a>
-    <a class="right-next"
-       href="stein_thinning.thinning.thin_gf.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">stein_thinning.thinning.thin_gf</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
@@ -433,7 +437,7 @@ selected points.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stein_thinning.thinning.thin"><code class="docutils literal notranslate"><span class="pre">thin()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stein_thinning.thinning.thin_gf"><code class="docutils literal notranslate"><span class="pre">thin_gf()</span></code></a></li>
 </ul>
   </nav></div>
 

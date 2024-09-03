@@ -15,6 +15,7 @@
       :toctree:
    
       thin
+      thin_gf
    
    
 
