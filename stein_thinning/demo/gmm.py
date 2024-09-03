@@ -1,10 +1,10 @@
-"""Test Stein Thinning."""
+"""Stein thinning for a Gaussian mixture model."""
 
 import numpy as np
 import matplotlib.pyplot as plt
 from os.path import join, dirname
 from stein_thinning.stein import ksd, kmat
-from stein_thinning.thinning import thin
+from stein_thinning.thinning import thin, _make_stein_integrand
 from stein_thinning.kernel import make_imq, make_precon
 
 if __name__ == '__main__':
@@ -23,14 +23,15 @@ if __name__ == '__main__':
 
     # Compute KSD
     vfk0 = make_imq(smp, preconditioner='sclmed')
-    ks_smp = ksd(smp, scr, vfk0)
-    ks_x = ksd(smp[idx], scr[idx], vfk0)
+    ks_smp = ksd(_make_stein_integrand(smp, scr, vfk0=vfk0), smp.shape[0])
+    idx_integrand = _make_stein_integrand(smp[idx], scr[idx], vfk0=vfk0)
+    ks_x = ksd(idx_integrand, len(idx))
 
     # Print out the inverse of the preconditioner matrix
     print(make_precon(smp, preconditioner='sclmed'))
 
     # Visualise the Stein kernel matrix
-    plt.matshow(kmat(smp[idx], scr[idx], vfk0))
+    plt.matshow(kmat(idx_integrand, len(idx)))
 
     # Plot KSD curves
     plt.figure()
