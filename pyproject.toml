@@ -50,3 +50,6 @@ push = true
 "stein_thinning/__init__.py" = [
     '{version}',
 ]
+"docs/source/conf.py" = [
+    "release = '{version}'",
+]
