@@ -33,11 +33,12 @@ def _greedy_search(
     np.ndarray
         indices of selected points
     """
-    # Pre-allocate arrays
+    # Pre-allocate the index array
     idx = np.empty(n_points, dtype=np.uint32)
 
-    # Populate columns of k0 as new points are selected
+    # Array for the running sums
     k0 = integrand(slice(None), slice(None))
+
     idx[0] = np.argmin(k0)
     logger.debug('THIN: %d of %d', 1, n_points)
     for i in range(1, n_points):
@@ -128,7 +129,7 @@ def _make_stein_gf_integrand(
     log_q_m_p -= np.min(log_q_m_p)
 
     if range_cap is not None:
-        assert range_cap > 0, 'Range cap must be positive'
+        assert range_cap > 0, 'range_cap must be positive'
         np.clip(log_q_m_p, a_min=None, a_max=range_cap, out=log_q_m_p)
 
     def integrand(ind1, ind2):
